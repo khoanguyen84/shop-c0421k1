@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="css/site.css">
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <h3>Add new product</h3>
+            <div class="add-product">
+                <div>
+                    <label>Product name</label>
+                    <input type="text" id="product-name">
+                </div>
+                <div>
+                    <a href="javascript:;" class="btn btn-success">Add</a>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <h3>Display all products</h3>
+            <div class="data-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#ID</th>
+                            <th>Product name</th>
+                            <th>10 products</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>IP 6s</td>
+                            <td>
+                                <a href="javascript:;" class="btn btn-warning">Edit</a>
+                                <a href="javascript:;" class="btn btn-danger">Remove</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>IP 7s</td>
+                            <td>
+                                <a href="javascript:;" class="btn btn-warning">Edit</a>
+                                <a href="javascript:;" class="btn btn-danger">Remove</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>Nokia 1120</td>
+                            <td>
+                                <a href="javascript:;" class="btn btn-warning">Edit</a>
+                                <a href="javascript:;" class="btn btn-danger">Remove</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>Samsung Galaxy S1S</td>
+                            <td>
+                                <a href="javascript:;" class="btn btn-warning">Edit</a>
+                                <a href="javascript:;" class="btn btn-danger">Remove</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="scripts/dashboard.js"></script>
+</body>
+</html>
