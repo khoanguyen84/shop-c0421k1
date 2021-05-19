@@ -10,6 +10,9 @@
 <body>
     <div class="container">
         <div class="row">
+            <h1></h1>
+        </div>
+        <div class="row">
             <h3>Add new product</h3>
             <div class="add-product">
                 <div>
@@ -17,7 +20,7 @@
                     <input type="text" id="product-name">
                 </div>
                 <div>
-                    <a href="javascript:;" class="btn btn-success">Add</a>
+                    <a href="javascript:;" class="btn btn-success" onclick="AddProduct()">Add</a>
                 </div>
             </div>
         </div>
@@ -29,42 +32,10 @@
                         <tr>
                             <th>#ID</th>
                             <th>Product name</th>
-                            <th>10 products</th>
+                            <th id="totalProduct"></th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>IP 6s</td>
-                            <td>
-                                <a href="javascript:;" class="btn btn-warning">Edit</a>
-                                <a href="javascript:;" class="btn btn-danger">Remove</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>IP 7s</td>
-                            <td>
-                                <a href="javascript:;" class="btn btn-warning">Edit</a>
-                                <a href="javascript:;" class="btn btn-danger">Remove</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>Nokia 1120</td>
-                            <td>
-                                <a href="javascript:;" class="btn btn-warning">Edit</a>
-                                <a href="javascript:;" class="btn btn-danger">Remove</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>4</td>
-                            <td>Samsung Galaxy S1S</td>
-                            <td>
-                                <a href="javascript:;" class="btn btn-warning">Edit</a>
-                                <a href="javascript:;" class="btn btn-danger">Remove</a>
-                            </td>
-                        </tr>
+                    <tbody id="tbProduct">
                     </tbody>
                 </table>
             </div>
