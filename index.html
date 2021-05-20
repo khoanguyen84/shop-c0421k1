@@ -17,7 +17,7 @@
             <div class="add-product">
                 <div>
                     <label>Product name</label>
-                    <input type="text" id="product-name">
+                    <input type="text" id="product-name" class='form-controll'>
                 </div>
                 <div>
                     <a href="javascript:;" class="btn btn-success" onclick="AddProduct()">Add</a>
@@ -26,6 +26,15 @@
         </div>
         <div class="row">
             <h3>Display all products</h3>
+            
+            <div>
+                <select id="pagesize" class="custom-select" onchange="changePagesize()">
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="50">50</option>
+                </select>
+                <input type="search" id="keyword" class='form-controll w-400'>
+            </div>
             <div class="data-table">
                 <table>
                     <thead>
@@ -38,6 +47,10 @@
                     <tbody id="tbProduct">
                     </tbody>
                 </table>
+            </div>
+            <div>
+                <ul id="paging">
+                </ul>
             </div>
         </div>
     </div>

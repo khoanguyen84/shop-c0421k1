@@ -24,9 +24,21 @@ html, body{
     border-radius: 5px;
 }
 
-.add-product input{
+.form-controll{
     width: 250px;
-    border:none;
+    border:1px solid grey;
+    outline: none;
+    padding: 5px;
+    border-radius: 3px;
+}
+
+.w-400{
+    width: 400px;
+}
+
+.custom-select{
+    width: 250px;
+    border:1px solid grey;
     outline: none;
     padding: 5px;
     border-radius: 3px;
@@ -96,4 +108,39 @@ html, body{
 
 .data-table tbody>tr>td:last-child{
     text-align: right;
+}
+
+.d-none{
+    display: none;
+}
+
+#paging{
+    list-style: none;
+}
+
+#paging li{
+    display: inline-block;
+}
+
+.paging-item{
+    padding: 13px;
+    border:none;
+    outline: none;
+    background-color: green;
+    border-radius: 5px;
+    cursor: pointer;
+    color: white;
+    margin-right: 5px;
+}
+
+.paging-item:hover{
+    background-color: darkgreen;
+}
+
+.active{
+    background-color: orange;
+}
+
+.active:hover{
+    background-color: darkorange;
 }
