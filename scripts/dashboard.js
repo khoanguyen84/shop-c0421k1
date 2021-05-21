@@ -2,6 +2,8 @@ let products = [];
 const key = "c0421k1-data";
 const defaultPagesize = 10;
 const defaultPageindex = 1;
+const success = 200;
+const error = 500;
 
 function init() {
     if (window.localStorage.getItem('c0421k1-data') == null) {
@@ -20,21 +22,23 @@ function init() {
     }
 }
 
-function showProduct() {
+function showProduct(data, pagesize, pageindex) {
     let tbproduct = document.getElementById('tbProduct');
     let totalProduct = document.getElementById('totalProduct');
-    totalProduct.innerHTML = `${products.length} products`;
+    totalProduct.innerHTML = `${data.length} products`;
     tbproduct.innerHTML = "";
-    products.forEach(function (value, index) {
+    
+    let list = data.slice((pageindex - 1)* pagesize, pageindex * pagesize);
+    list.forEach(function (value, index) {
         tbproduct.innerHTML += `
                         <tr id="tr_${index}">
                             <td>${index + 1}</td>
                             <td>${value}</td>
                             <td>
-                                <a href="javascript:;" class="btn btn-warning" onclick="edit(${index})">Edit</a>
-                                <a href="javascript:;" class="btn btn-success d-none" onclick="update(${index})">Update</a>
-                                <a href="javascript:;" class="btn btn-warning d-none" onclick="reset(${index})">Cancel</a>
-                                <a href="javascript:;" class="btn btn-danger" onclick='remove(${index})'>Remove</a>
+                                <a href="javascript:;" class="btn btn-warning" onclick="edit(${index})"><i class="fa fa-edit"></i></a>
+                                <a href="javascript:;" class="btn btn-success d-none" onclick="update(${index})"><i class="fa fa-save"></i></a>
+                                <a href="javascript:;" class="btn btn-warning d-none" onclick="reset(${index})"><i class="fa fa-remove"></i></a>
+                                <a href="javascript:;" class="btn btn-danger" onclick='remove(${index})'><i class="fa fa-trash"></i></a>
                             </td>
                         </tr>
                         `;
@@ -45,7 +49,8 @@ function AddProduct() {
     let productName = document.getElementById('product-name').value;
     productName = clearUnnecessaryWhiteSpace(productName);
     if (isNullOrEmpty(productName)) {
-        alert('Product name is required.');
+        // alert('Product name is required.');
+        showMessage(error, 'Product name is required.');
         clear();
     }
     else if (isExistProduct(productName, products) != -1) {
@@ -55,7 +60,7 @@ function AddProduct() {
         products.push(productName);
         setLocalStorage(key, products);
         clear();
-        showProduct();
+        showProduct(products, defaultPagesize, defaultPageindex);
     }
 }
 
@@ -106,7 +111,8 @@ function remove(index) {
     if (confirmed) {
         products.splice(index, 1);
         setLocalStorage(key, products);
-        showProduct();
+        showProduct(products, defaultPagesize, defaultPageindex);
+        showMessage(success, "Product has been remove successful!");
     }
 }
 
@@ -134,22 +140,23 @@ function update(index){
     let newProducName = tds[1].children[0].value;
     newProducName = clearUnnecessaryWhiteSpace(newProducName);
     if(isNullOrEmpty(newProducName)){
-        window.alert("Product name is required");
+        showMessage(error, "Product name is required");
     }
     else{
         let pos = isExistProduct(newProducName, products);
         if(pos != -1 && pos != index){
-            window.alert(`Product name: ${newProducName} is exits.`);
+            showMessage(error, `Product name: ${newProducName} is exits.`);
         }
         else{
             products[index] = newProducName;
             setLocalStorage(key, products)
-            showProduct();
+            showProduct(products, defaultPagesize, defaultPageindex);
+            showMessage(success, `Product has been update successful.`);
         }
     }
 }
 
-function buildPaging(pagesize, pageindex){
+function buildPaging(products, pagesize, pageindex){
     let totalPages = Math.ceil(products.length/pagesize);
     let paging = document.getElementById('paging');
     paging.innerHTML = "";
@@ -160,18 +167,56 @@ function buildPaging(pagesize, pageindex){
 }
 
 function changeIndex(index){
-    buildPaging(defaultPagesize, index);
+    let pagesize = parseInt(document.getElementById('pagesize').value);
+    buildPaging(products, pagesize, index);
+    showProduct(products, pagesize, index);
 }
 
 function changePagesize(){
-    let pagesize = parseInt(document.getElementById('pagesize').value)
-    buildPaging(pagesize, defaultPageindex);
+    let pagesize = parseInt(document.getElementById('pagesize').value);
+    buildPaging(products,pagesize, defaultPageindex);
+    showProduct(products, pagesize, defaultPageindex);
+}
+
+function search(el){
+    let data = products;
+    let keyword  = el.value;
+    if(keyword != null && keyword != ""){
+        data = products.filter(function(value, index){
+            return value.toLowerCase().indexOf(keyword.toLowerCase()) != -1;
+        });
+    }
+    let pagesize = parseInt(document.getElementById('pagesize').value);
+    showProduct(data, pagesize, defaultPageindex);
+    buildPaging(data,pagesize, defaultPageindex);
+}
+
+function showMessage(type, msg){
+    let alert = document.getElementById('alert');
+    alert.classList.remove('d-none');
+    alert.children[0].classList.remove('success');
+    alert.children[0].classList.remove('error');
+    alert.children[0].classList.add( type == success ? 'success' : 'error' );
+    alert.children[0].children[0].innerHTML = msg;
+
+    autoCloseMessage();
+}
+
+function closeMessage(){
+    let alert = document.getElementById('alert');
+    alert.classList.add('d-none');
+}
+
+function autoCloseMessage(){
+    setInterval(() => {
+        closeMessage();
+    }, 7*1000);
 }
 
 function documentReady() {
     init();
-    showProduct();
-    buildPaging(defaultPagesize, defaultPageindex);
+    showProduct(products, defaultPagesize, defaultPageindex);
+    buildPaging(products,defaultPagesize, defaultPageindex);
 }
 
 documentReady();

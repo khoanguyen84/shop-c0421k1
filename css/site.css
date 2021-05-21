@@ -144,3 +144,17 @@ html, body{
 .active:hover{
     background-color: darkorange;
 }
+
+.message{
+    width: 100%;
+    padding: 10px 0px;
+    color:white;
+}
+
+.success{
+    background-color: #3edbf0;
+}
+
+.error{
+    background-color: #fb3640;
+}

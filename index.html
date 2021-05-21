@@ -5,12 +5,18 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="css/site.css">
 </head>
 <body>
     <div class="container">
-        <div class="row">
-            <h1></h1>
+        <div class="row d-none" id="alert">
+            <div class="message">
+                <span></span>
+                <a href="javascript:;" class="btn btn-danger" onclick="closeMessage()">
+                    <i class="fa fa-times"></i>
+                </a>
+            </div>
         </div>
         <div class="row">
             <h3>Add new product</h3>
@@ -20,7 +26,7 @@
                     <input type="text" id="product-name" class='form-controll'>
                 </div>
                 <div>
-                    <a href="javascript:;" class="btn btn-success" onclick="AddProduct()">Add</a>
+                    <a href="javascript:;" class="btn btn-success" onclick="AddProduct()"><i class="fa fa-plus"></i></a>
                 </div>
             </div>
         </div>
@@ -33,7 +39,7 @@
                     <option value="20">20</option>
                     <option value="50">50</option>
                 </select>
-                <input type="search" id="keyword" class='form-controll w-400'>
+                <input type="search" id="keyword" class='form-controll w-400' oninput="search(this)">
             </div>
             <div class="data-table">
                 <table>
