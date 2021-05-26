@@ -32,6 +32,12 @@ html, body{
     border-radius: 3px;
 }
 
+.w-100{
+    width: 100px;
+}
+.w-150{
+    width: 150px;
+}
 .w-400{
     width: 400px;
 }
@@ -46,6 +52,11 @@ html, body{
 
 .add-product>div{
     margin-bottom: 7px;
+}
+
+label{
+    display: inline-block; 
+    width: 30%;
 }
 
 .btn{
@@ -157,4 +168,33 @@ html, body{
 
 .error{
     background-color: #fb3640;
+}
+
+@media (max-width: 480px) {
+    .form-controll{
+        width: 70%;
+    }
+    label{
+        display: block; 
+        width: 100%;
+    }
+    body{
+        overflow-y: scroll;
+    }
+    .btn{
+        float: left;
+    }
+}
+
+@media (max-width: 760px) {
+    .form-controll{
+        width: 70%;
+    }
+    label{
+        display: block; 
+        width: 100%;
+    }
+    .btn{
+        float: left;
+    }
 }

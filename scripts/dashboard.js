@@ -4,12 +4,31 @@ const defaultPagesize = 10;
 const defaultPageindex = 1;
 const success = 200;
 const error = 500;
+let increment = 1;
+
+class Product
+{
+    constructor(name, price, quantity, photo)
+    {
+        this.productId = increment ++;
+        this.productName = name,
+        this.price = price,
+        this.quantity = quantity,
+        this.photo = photo
+    }
+}
 
 function init() {
     if (window.localStorage.getItem('c0421k1-data') == null) {
-        products = ["Sony Xperia", "Samsung Galaxy", "Nokia 6", "Xiaomi Redmi Note 4",
-            "Apple iPhone 6S", "Xiaomi Mi 5s Plus", "Apple iPhone 8 Plus",
-            "Fujitus F-04E", "Oppo A71", "Apple iPhone X"];
+        let product1 = new Product("Sony Xperia", 2000000, 10, 'images/ip6plus.jpg');
+        let product2 = new Product("Samsung Galaxy", 2500000, 20, 'images/ip6plus.jpg');
+        let product3 = new Product("Nokia 6", 3000000, 15, 'images/ip6plus.jpg');
+        let product4 = new Product("Xiaomi Redmi Note 4", 4700000, 5, 'images/ip6plus.jpg');
+        let product5 = new Product("Apple iPhone 6S", 5600000, 11, 'images/ip6plus.jpg');
+        // products = ["Sony Xperia", "Samsung Galaxy", "Nokia 6", "Xiaomi Redmi Note 4",
+        //     "Apple iPhone 6S", "Xiaomi Mi 5s Plus", "Apple iPhone 8 Plus",
+        //     "Fujitus F-04E", "Oppo A71", "Apple iPhone X"];
+        products = [product1, product2, product3, product4, product5]
         setLocalStorage(key, products);
     }
     else {
@@ -22,6 +41,13 @@ function init() {
     }
 }
 
+let tempProducts = [... products];
+increment = tempProducts.length == 0 ? 
+                1 : 
+                tempProducts.sort(function(p1, p2){
+                    return p2.productId - p1.productId;
+                })[0].productId;
+
 function showProduct(data, pagesize, pageindex) {
     let tbproduct = document.getElementById('tbProduct');
     let totalProduct = document.getElementById('totalProduct');
@@ -29,16 +55,19 @@ function showProduct(data, pagesize, pageindex) {
     tbproduct.innerHTML = "";
     
     let list = data.slice((pageindex - 1)* pagesize, pageindex * pagesize);
-    list.forEach(function (value, index) {
+    list.forEach(function (product, index) {
         tbproduct.innerHTML += `
-                        <tr id="tr_${index}">
-                            <td>${index + 1}</td>
-                            <td>${value}</td>
+                        <tr id="tr_${product.productId}">
+                            <td>${product.productId}</td>
+                            <td>${product.productName}</td>
+                            <td style='text-align:right'>${formatCurrency(product.price)}</td>
+                            <td style='text-align:right'>${product.quantity}</td>
+                            <td><img src="${product.photo}" width="50px" height="70px"></td>
                             <td>
-                                <a href="javascript:;" class="btn btn-warning" onclick="edit(${index})"><i class="fa fa-edit"></i></a>
-                                <a href="javascript:;" class="btn btn-success d-none" onclick="update(${index})"><i class="fa fa-save"></i></a>
-                                <a href="javascript:;" class="btn btn-warning d-none" onclick="reset(${index})"><i class="fa fa-remove"></i></a>
-                                <a href="javascript:;" class="btn btn-danger" onclick='remove(${index})'><i class="fa fa-trash"></i></a>
+                                <a href="javascript:;" class="btn btn-warning" onclick="edit(${product.productId})"><i class="fa fa-edit"></i></a>
+                                <a href="javascript:;" class="btn btn-success d-none" onclick="update(${product.productId})"><i class="fa fa-save"></i></a>
+                                <a href="javascript:;" class="btn btn-warning d-none" onclick="reset(${product.productId})"><i class="fa fa-remove"></i></a>
+                                <a href="javascript:;" class="btn btn-danger" onclick='remove(${product.productId})'><i class="fa fa-trash"></i></a>
                             </td>
                         </tr>
                         `;
@@ -47,6 +76,8 @@ function showProduct(data, pagesize, pageindex) {
 
 function AddProduct() {
     let productName = document.getElementById('product-name').value;
+    let price = parseInt(document.getElementById('price').value);
+    let quantity = parseInt(document.getElementById('quantity').value);
     productName = clearUnnecessaryWhiteSpace(productName);
     if (isNullOrEmpty(productName)) {
         // alert('Product name is required.');
@@ -57,7 +88,8 @@ function AddProduct() {
         alert(`Product name: ${productName} is exist.`);
     }
     else {
-        products.push(productName);
+        let product = new Product(productName, price, quantity, 'images/ip6plus.jpg');
+        products.push(product);
         setLocalStorage(key, products);
         clear();
         showProduct(products, defaultPagesize, defaultPageindex);
@@ -66,6 +98,8 @@ function AddProduct() {
 
 function clear() {
     document.getElementById('product-name').value = '';
+    let price = document.getElementById('price').value = 0;
+    let quantity = document.getElementById('quantity').value = 0;
 }
 
 function getLocalStorage() {
@@ -83,8 +117,8 @@ function isNullOrEmpty(str) {
 
 function isExistProduct(productName, data) {
     productName = clearUnnecessaryWhiteSpace(productName);
-    return data.findIndex(function (value, index) {
-        return value.toLowerCase() == productName.toLowerCase();
+    return data.findIndex(function (product, index) {
+        return product.productName.toLowerCase() == productName.toLowerCase();
     });
 }
 
@@ -106,9 +140,12 @@ function capitalize(str) {
     return str;
 }
 
-function remove(index) {
+function remove(id) {
     let confirmed = window.confirm('Are you sure to remove this product?');
     if (confirmed) {
+        let index = products.findIndex(function(product, index){
+                        return product.productId == id
+                    });
         products.splice(index, 1);
         setLocalStorage(key, products);
         showProduct(products, defaultPagesize, defaultPageindex);
@@ -116,28 +153,36 @@ function remove(index) {
     }
 }
 
-function edit(index){
-    let tr = document.getElementById(`tr_${index}`);
+function edit(id){
+    let product = findById(id);
+    let tr = document.getElementById(`tr_${id}`);
     let tds = tr.children;
-    tds[1].innerHTML = `<input class='form-controll' type='text' value='${products[index]}'>`;
-    tds[2].children[0].classList.add('d-none');
-    tds[2].children[1].classList.remove('d-none');
-    tds[2].children[2].classList.remove('d-none');
+    tds[1].innerHTML = `<input class='form-controll' type='text' value='${product.productName}'>`;
+    tds[2].innerHTML = `<input class='form-controll w-150' type='number' value='${product.price}'>`;
+    tds[3].innerHTML = `<input class='form-controll w-100' type='number' value='${product.quantity}'>`;
+    tds[5].children[0].classList.add('d-none');
+    tds[5].children[1].classList.remove('d-none');
+    tds[5].children[2].classList.remove('d-none');
 }
 
-function reset(index){
-    let tr = document.getElementById(`tr_${index}`);
+function reset(id){
+    let product = findById(id);
+    let tr = document.getElementById(`tr_${id}`);
     let tds = tr.children;
-    tds[1].innerHTML = `${products[index]}`;
-    tds[2].children[0].classList.remove('d-none');
-    tds[2].children[1].classList.add('d-none');
-    tds[2].children[2].classList.add('d-none');
+    tds[1].innerHTML = `${product.productName}`;
+    tds[2].innerHTML = `${formatCurrency(product.price)}`;
+    tds[3].innerHTML = `${product.quantity}`;
+    tds[5].children[0].classList.remove('d-none');
+    tds[5].children[1].classList.add('d-none');
+    tds[5].children[2].classList.add('d-none');
 }
 
-function update(index){
-    let tr = document.getElementById(`tr_${index}`);
+function update(id){
+    let tr = document.getElementById(`tr_${id}`);
     let tds = tr.children;
     let newProducName = tds[1].children[0].value;
+    let newPrice = parseInt(tds[2].children[0].value);
+    let newQuantity = parseInt(tds[3].children[0].value);
     newProducName = clearUnnecessaryWhiteSpace(newProducName);
     if(isNullOrEmpty(newProducName)){
         showMessage(error, "Product name is required");
@@ -148,7 +193,11 @@ function update(index){
             showMessage(error, `Product name: ${newProducName} is exits.`);
         }
         else{
-            products[index] = newProducName;
+            let product = findById(id);
+            product.productName = newProducName;
+            product.price = newPrice;
+            product.quantity = newQuantity;
+
             setLocalStorage(key, products)
             showProduct(products, defaultPagesize, defaultPageindex);
             showMessage(success, `Product has been update successful.`);
@@ -182,8 +231,8 @@ function search(el){
     let data = products;
     let keyword  = el.value;
     if(keyword != null && keyword != ""){
-        data = products.filter(function(value, index){
-            return value.toLowerCase().indexOf(keyword.toLowerCase()) != -1;
+        data = products.filter(function(product, index){
+            return product.productName.toLowerCase().indexOf(keyword.toLowerCase()) != -1;
         });
     }
     let pagesize = parseInt(document.getElementById('pagesize').value);
@@ -213,6 +262,15 @@ function autoCloseMessage(){
     }, 7*1000);
 }
 
+function findById(id){
+    return products.find(function(product, index){
+        return product.productId == id;
+    })
+}
+
+function formatCurrency(number){
+    return number.toLocaleString('it-IT', {style : 'currency', currency : 'VND'});
+}
 function documentReady() {
     init();
     showProduct(products, defaultPagesize, defaultPageindex);
@@ -220,3 +278,4 @@ function documentReady() {
 }
 
 documentReady();
+
